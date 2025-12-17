@@ -446,31 +446,31 @@ else:
 COST_FILE_PATH = find_cost_file()
 COSTS = load_costs_from_repo(COST_FILE_PATH, file_md5(COST_FILE_PATH))
 
-# Sidebar: Cost coverage by Region
-with st.sidebar.expander("Cost Coverage (by Region)", expanded=False):
-    if COSTS.empty:
-        st.write("No cost file loaded (or missing required columns).")
-    else:
-        total_programs = COSTS["__Program"].nunique(dropna=True)
-        missing_cost = int(COSTS["__Cost"].isna().sum())
-        st.write(f"Programs in cost file: **{total_programs:,}**")
-        st.write(f"Rows missing Cost: **{missing_cost:,}**")
+# # Sidebar: Cost coverage by Region
+# with st.sidebar.expander("Cost Coverage (by Region)", expanded=False):
+#     if COSTS.empty:
+#         st.write("No cost file loaded (or missing required columns).")
+#     else:
+#         total_programs = COSTS["__Program"].nunique(dropna=True)
+#         missing_cost = int(COSTS["__Cost"].isna().sum())
+#         st.write(f"Programs in cost file: **{total_programs:,}**")
+#         st.write(f"Rows missing Cost: **{missing_cost:,}**")
 
-        # Coverage table
-        cov = COSTS.copy()
-        cov["Region"] = cov["Region"].fillna("(missing)")
-        cov["Has Cost"] = ~cov["__Cost"].isna()
-        by_region = (
-            cov.groupby("Region", dropna=False)
-            .agg(
-                Programs=("__Program", "nunique"),
-                With_Cost=("Has Cost", "sum"),
-            )
-            .reset_index()
-        )
-        by_region["Coverage %"] = (by_region["With_Cost"] / by_region["Programs"]).where(by_region["Programs"] > 0) * 100
-        by_region = by_region.sort_values(["Coverage %", "Programs"], ascending=[False, False])
-        st.dataframe(by_region, use_container_width=True)
+#         # Coverage table
+#         cov = COSTS.copy()
+#         cov["Region"] = cov["Region"].fillna("(missing)")
+#         cov["Has Cost"] = ~cov["__Cost"].isna()
+#         by_region = (
+#             cov.groupby("Region", dropna=False)
+#             .agg(
+#                 Programs=("__Program", "nunique"),
+#                 With_Cost=("Has Cost", "sum"),
+#             )
+#             .reset_index()
+#         )
+#         by_region["Coverage %"] = (by_region["With_Cost"] / by_region["Programs"]).where(by_region["Programs"] > 0) * 100
+#         by_region = by_region.sort_values(["Coverage %", "Programs"], ascending=[False, False])
+#         st.dataframe(by_region, use_container_width=True)
 
 
 # =========================================================
