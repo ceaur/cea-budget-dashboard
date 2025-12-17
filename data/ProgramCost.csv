@@ -9,7 +9,8 @@ ASE SUMMER SCHOOL,Bath,United Kingdom,Europe,
 Australian National University - ANUÊ(Exchange),Canberra,Australia,Australia/Pacific Islands,
 Birmingham City UniversityÊ(Exchange),Birmingham,United Kingdom,Europe,
 Budapest Semesters in Mathematics,Budapest,Hungary,Europe,
-Chinese University of Hong KongÊ(Exchange),Hong Kong,China,Asia,0
+Chinese University of Hong Kong(Exchange),Hong Kong,China,Asia,0
+Chinese University of Hong Kong,Hong Kong,China,Asia,0
 Chinese University of Hong Kong - International Summer School,Hong Kong,China,Asia,
 "CIEE Business, Arts + Sciences in Prague, Czech Republic",Prague,Czech Republic,Europe,19950
 "CIEE Central European Studies Program in Prague, Czech Republic",Prague,Czech Republic,Europe,19950
@@ -87,7 +88,8 @@ KAIST - Korea Advanced Institute of Science & Technology (GE3 - Engineering),Dae
 Khalifa University of Science and Technology (GE3 - Engineering),Abu Dhabi,United Arab Emirates,Middle East,
 Kingston University,London,United Kingdom,Europe,7362
 Ko University,Istanbul,Turkey,Middle East,
-Kyoto UniversityÊ(Exchange),Kyoto,Japan,Asia,0
+Kyoto University(Exchange),Kyoto,Japan,Asia,0
+Kyoto University,Kyoto,Japan,Asia,0
 La Salle - Universitat Ramon Llull,Barcelona,Spain,Europe,
 Lisio Italian Studies: Florence Creative Writing Workshop,Florence,Italy,Europe,
 "Lisio Studies: Sustainability, Food, and Local Cultures",Bra,Italy,Europe,
@@ -95,8 +97,10 @@ Lisio Italian Studies: Florence Creative Writing Workshop,Florence,Italy,Europe,
 "Lisio Studies: Sustainability, Food, and Local Cultures",Naples,Italy,Europe,
 Lund University (GE3 - Engineering),Lund,Sweden,Europe,
 Mahidol University International College (MUIC),Salaya,Thailand,Asia,0
-Meiji Gakuin UniversityÊ(Exchange),Tokyo,Japan,Asia,0
-Nanyang Technological UniversityÊ(Exchange),Singapore,Singapore,Asia,0
+Meiji Gakuin University(Exchange),Tokyo,Japan,Asia,0
+Meiji Gakuin University,Tokyo,Japan,Asia,0
+Nanyang Technological University(Exchange),Singapore,Singapore,Asia,0
+Nanyang Technological University,Singapore,Singapore,Asia,0
 Nanyang Technological University - Summer Program,Singapore,Singapore,Asia,
 Non-Rochester Program (Non-Credit),Multiple,Multiple,Multiple,0
 Non-Rochester SMD Student Travel (Credit-Bearing Elective),Multiple,Multiple,Multiple,0
@@ -106,7 +110,8 @@ Non-Rochester Summer Program,Multiple,Multiple,Multiple,
 POSTECH (Pohang University of Science & Technology) (GE3 - Engineering),Pohang-si,South Korea,Asia,
 Queen Mary University of London,London,United Kingdom,Europe,11000
 Queen Mary University of London Summer School,London,United Kingdom,Europe,
-Seoul National UniversityÊ(Exchange),Seoul,South Korea,Asia,0
+Seoul National University(Exchange),Seoul,South Korea,Asia,0
+Seoul National University,Seoul,South Korea,Asia,0
 Seoul National University - International Summer Program,Seoul,South Korea,Asia,
 SMD Medical Research - Full Year,Multiple,Multiple,Multiple,
 SMD Student Travel (Credit-Bearing Elective),Multiple,Multiple,Multiple,0
@@ -148,5 +153,6 @@ Waseda UniversityÊ(Exchange),Tokyo,Japan,Asia,0
 Waseda University - Summer Session,Tokyo,Japan,Asia,
 Yonsei UniversityÊ(Exchange),Seoul,South Korea,Asia,0
 Yonsei University - International Summer School,Seoul,South Korea,Asia,
+
 
 
