@@ -1,11 +1,11 @@
 Program Name,City,Country,Region,Cost
-Absolute Internship,Multiple,Multiple,Multiple,
-Absolute Internship (Virtual Program),Rochester,United States,North America,
+Absolute Internship,Multiple,Multiple,Multiple,0
+Absolute Internship (Virtual Program),Rochester,United States,North America,0
 Advanced Studies in England,Bath,United Kingdom,Europe,23950
 AIT Budapest Program in Computer Science & Software Engineering,Budapest,Hungary,Europe,
 American University in Cairo(Exchange),Cairo,Egypt,Africa,0
 Ancient Rome in Context,Rome,Italy,Europe,
-ASE SUMMER SCHOOL,Bath,United Kingdom,Europe,
+ASE SUMMER SCHOOL,Bath,United Kingdom,Europe,0
 Australian National University - ANU(Exchange),Canberra,Australia,Australia/Pacific Islands,
 Birmingham City University(Exchange),Birmingham,United Kingdom,Europe,
 Budapest Semesters in Mathematics,Budapest,Hungary,Europe,
@@ -581,6 +581,7 @@ Waseda University - Summer Session,Tokyo,Japan,Asia,
 Waseda University(Exchange),Tokyo,Japan,Asia,0
 Yonsei University - International Summer School,Seoul,South Korea,Asia,
 Yonsei University(Exchange),Seoul,South Korea,Asia,0
+
 
 
 
