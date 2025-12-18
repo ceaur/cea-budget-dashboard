@@ -2,14 +2,14 @@ Program Name,City,Country,Region,Cost
 Absolute Internship,Multiple,Multiple,Multiple,0
 Absolute Internship (Virtual Program),Rochester,United States,North America,0
 Advanced Studies in England,Bath,United Kingdom,Europe,23950
-AIT Budapest Program in Computer Science & Software Engineering,Budapest,Hungary,Europe,
+AIT Budapest Program in Computer Science & Software Engineering,Budapest,Hungary,Europe,20500
 American University in Cairo(Exchange),Cairo,Egypt,Africa,0
 American University in Cairo,Cairo,Egypt,Africa,0
-Ancient Rome in Context,Rome,Italy,Europe,
+Ancient Rome in Context,Rome,Italy,Europe,0
 ASE SUMMER SCHOOL,Bath,United Kingdom,Europe,0
-Australian National University - ANU(Exchange),Canberra,Australia,Australia/Pacific Islands,
-Birmingham City University(Exchange),Birmingham,United Kingdom,Europe,
-Budapest Semesters in Mathematics,Budapest,Hungary,Europe,
+Australian National University - ANU(Exchange),Canberra,Australia,Australia/Pacific Islands,0
+Birmingham City University(Exchange),Birmingham,United Kingdom,Europe,0
+Budapest Semesters in Mathematics,Budapest,Hungary,Europe,15100
 Chinese University of Hong Kong,Hong Kong,China,Asia,0
 Chinese University of Hong Kong - International Summer School,Hong Kong,China,Asia,0
 Chinese University of Hong Kong(Exchange),Hong Kong,China,Asia,0
@@ -277,7 +277,7 @@ CIEE Summer Accelerated Chinese Language,Shanghai,China,Asia,8450
 CIEE Summer Accelerated Chinese Language,Taipei,Taiwan,Asia,8750
 CIEE Summer Arabic Language,Amman,Jordan,Middle East,8750
 CIEE Summer Arabic Language,Rabat,Morocco,Africa,8750
-"CIEE Summer Central European Studies in Prague, Czech Republic",Prague,Czech Republic,Europe,
+"CIEE Summer Central European Studies in Prague, Czech Republic",Prague,Czech Republic,Europe,4950
 CIEE Summer Community Development and Social Justice: Theory and Practice,Cape Town,South Africa,Africa,8750
 CIEE Summer Community Public Health,Gaborone,Botswana,Africa,7950
 CIEE Summer Community Public Health,Buenos Aires,Argentina,South America,8750
@@ -308,14 +308,14 @@ CIEE Summer Global Internship,Florence,Italy,Europe,8950
 CIEE Summer Global Internship,Kyoto,Japan,Asia,8950
 CIEE Summer Global Internship,Singapore,Singapore,Asia,8950
 CIEE Summer Global Internship in Alicante,Alcala,Spain,Europe,6950
-"CIEE Summer Global Internship in Amman, Jordan",Amman,Jordan,Middle East,
+"CIEE Summer Global Internship in Amman, Jordan",Amman,Jordan,Middle East,5950
 CIEE Summer Global Internship in Gaborone,Gaborone,Botswana,Africa,6950
 CIEE Summer Global Internship in Kyoto,Kyoto,Japan,Asia,8950
 CIEE Summer Global Internship in Rabat,Rabat,Morocco,Africa,6950
 CIEE Summer Global Internship in Rennes,Nice,France,Europe,6950
 CIEE Summer Global Internship in Toulouse,Nice,France,Europe,6950
 CIEE Summer Global Internship Language Immersive,Alcala,Spain,Europe,8950
-"CIEE Summer Global Internship Program in Prague, Czech Republic",Prague,Czech Republic,Europe,0
+"CIEE Summer Global Internship Program in Prague, Czech Republic",Prague,Czech Republic,Europe,6950
 CIEE Summer in Tokyo at Sophia University,Kyoto,Japan,Asia,5750
 CIEE Summer Intensive French Language,Nice,France,Europe,8750
 CIEE Summer Intensive Russian Lanuage,Tallinn,Estonia,Europe,6750
@@ -354,7 +354,7 @@ CIEE Summer Intern + Study Abroad in Tokyo,Kyoto,Japan,Asia,6950
 CIEE Summer Intern + Study Abroad in Toulouse,Nice,France,Europe,5950
 CIEE Summer Japanese Studies,Kyoto,Japan,Asia,8750
 CIEE Summer Korean Studies,Seoul,South Korea,Asia,8750
-"CIEE Summer Middle East Studies Program in Amman, Jordan",Amman,Jordan,Middle East,
+"CIEE Summer Middle East Studies Program in Amman, Jordan",Amman,Jordan,Middle East,6000
 CIEE Summer Spanish Language,Buenos Aires,Argentina,South America,8750
 CIEE Summer Tropical Ecology and Conservation,Monteverde,Costa Rica,Central America,9250
 CIEE Sustainability and the Environment,Monteverde,Costa Rica,Central America,19950
@@ -382,36 +382,29 @@ CIEE Tropical Ecology and Conservation,Monteverde,Costa Rica,Central America,149
 CIEE University College Dublin Arts and Sciences,Dublin,Ireland,Europe,24950
 CIS Abroad Semester in Barcelona - Universitat Autonoma de Barcelona,Barcelona,Spain,Europe,17590
 City St. George's University of London,London,United Kingdom,Europe,13375
-City University of Hong Kong (GE3 - Engineering),Hong Kong,China,Asia,
+City University of Hong Kong (GE3 - Engineering),Hong Kong,China,Asia,0
 College Year in Athens - Semester and Academic Year Program,Athens,Greece,Europe,26500
-College Year in Athens-Summer Program,Athens,Greece,Europe,
-College Year in Athens-Summer Program,Copenhagen,Denmark,Europe,
-College Year in Athens-Summer Program,Rome,Italy,Europe,
-College Year in Athens-Summer Program,Stockholm,Sweden,Europe,
-College Year in Athens-Summer Program,Thessaloniki,Greece,Europe,
-Conversational Japanese in Tokyo,Tokyo,Japan,Asia,
+Conversational Japanese in Tokyo,Tokyo,Japan,Asia,0
 "DIS - Study Abroad in Copenhagen, Denmark",Copenhagen,Denmark,Europe,30840
 "DIS - Study Abroad in Stockholm, Sweden",Stockholm,Sweden,Europe,30840
-DIS Copenhagen - Summer Courses,Copenhagen,Denmark,Europe,0
-DIS Stockholm - Summer Courses,Stockholm,Sweden,Europe,0
-DTU - Technical University of Denmark (GE3 - Engineering),Lyngby,Denmark,Europe,
-ESM - Central Conservatory of Music,Beijing,China,Asia,
-ESM - China Conservatory of Music,Beijing,China,Asia,
-ESM - Conservatoire National Sup≈Ωrieur de Musique et de Danse de Paris,Paris,France,Europe,
+DTU - Technical University of Denmark (GE3 - Engineering),Lyngby,Denmark,Europe,0
+ESM - Central Conservatory of Music,Beijing,China,Asia,0
+ESM - China Conservatory of Music,Beijing,China,Asia,0
+ESM - Conservatoire National Sup‚âàŒ©rieur de Musique et de Danse de Paris,Paris,France,Europe,0
 ESM - Hochschule fur Musik Freiburg,Freiburg,Germany,Europe,0
-ESM - Hochschule fur Musik Wurzburg,W≈∏rzburg,Germany,Europe,
-ESM - Mahidol College of Music,Bangkok,Thailand,Asia,
-ESM - Royal Birmingham Conservatoire,Birmingham,United Kingdom,Europe,
-ESM - Royal College of Music,London,United Kingdom,Europe,
-ESM - Sibelius Academy,Helsinki,Finland,Europe,
-ESM - The Royal Danish Academy of Music,Copenhagen,Denmark,Europe,
-ESM - Universitat fur Musik und darstellende Kunst Wien,Vienna,Austria,Europe,
+ESM - Hochschule fur Musik Wurzburg,W‚âà‚àèrzburg,Germany,Europe,0
+ESM - Mahidol College of Music,Bangkok,Thailand,Asia,0
+ESM - Royal Birmingham Conservatoire,Birmingham,United Kingdom,Europe,0
+ESM - Royal College of Music,London,United Kingdom,Europe,0
+ESM - Sibelius Academy,Helsinki,Finland,Europe,0
+ESM - The Royal Danish Academy of Music,Copenhagen,Denmark,Europe,0
+ESM - Universitat fur Musik und darstellende Kunst Wien,Vienna,Austria,Europe,0
 Florence: Lisio Italian Studies,Florence,Italy,Europe,14995
-French in France (Faculty Led),Rennes,France,Europe,
-German in Germany (Faculty Led),Berlin,Germany,Europe,
-Greene Center Internship Abroad,Multiple,Multiple,Multiple,
+French in France (Faculty Led),Rennes,France,Europe,0
+German in Germany (Faculty Led),Berlin,Germany,Europe,0
+Greene Center Internship Abroad,Multiple,Multiple,Multiple,0
 Hanyang University (GE3 - Engineering),Seoul,South Korea,Asia,0
-Hong Kong Polytechnic University (GE3 - Engineering),Hong Kong,China,Asia,
+Hong Kong Polytechnic University (GE3 - Engineering),Hong Kong,China,Asia,0
 IES Abroad Amsterdam - Business & Economics,Amsterdam,Netherlands,Europe,23950
 IES Abroad Amsterdam - Law & Criminology,Amsterdam,Netherlands,Europe,22874
 IES Abroad Amsterdam - Psychology & Sciences,Amsterdam,Netherlands,Europe,23950
@@ -433,7 +426,7 @@ IES Abroad Buenos Aires - Society & Culture,Buenos Aires,Argentina,South America
 IES Abroad Cape Town - Engineering,Cape Town,South Africa,Africa,20137
 "IES Abroad Cape Town - Health, Culture & Development",Cape Town,South Africa,Africa,20950
 IES Abroad Cape Town - University of Cape Town,Cape Town,South Africa,Africa,20950
-IES Abroad Cape Town √ê Engineering & Science,Cape Town,South Africa,Africa,
+IES Abroad Cape Town‚ Engineering & Science,Cape Town,South Africa,Africa,21369
 IES Abroad Christchurch Direct Enrollment - University of Canterbury,Christchurch,New Zealand,Australia/Pacific Islands,21415
 IES Abroad Dublin - Engineering,Dublin,Ireland,Europe,20137
 IES Abroad Dublin - Full-Time Semester Internship,Dublin,Ireland,Europe,10950
@@ -443,14 +436,14 @@ IES Abroad Dublin Direct Enrollment - Dublin City University,Dublin,Ireland,Euro
 IES Abroad Dublin Direct Enrollment - National Theatre School of Ireland-Gaiety School of Acting,Dublin,Ireland,Europe,21550
 IES Abroad Dublin Direct Enrollment - Trinity College,Dublin,Ireland,Europe,27100
 IES Abroad Dublin Direct Enrollment - Trinity College Dublin,Dublin,Ireland,Europe,27100
-IES Abroad Dublin Summer - Internship,Dublin,Ireland,Europe,
+IES Abroad Dublin Summer - Internship,Dublin,Ireland,Europe,8544
 IES Abroad Freiburg - Environmental Studies & Sustainability,Freiburg,Germany,Europe,24150
 "IES Abroad Freiburg - European Union - Politics, Law & Economics",Freiburg,Germany,Europe,24918
 "IES Abroad Freiburg - European Union: Politics, Law & Economics",Freiburg,Germany,Europe,24918
 IES Abroad Freiburg - Language & Area Studies,Freiburg,Germany,Europe,21990
-IES Abroad Freiburg Summer - European Union: Politics & Economics,Freiburg,Germany,Europe,0
+IES Abroad Freiburg Summer - European Union: Politics & Economics,Freiburg,Germany,Europe,9440
 IES Abroad Granada - Liberal Arts & Language,Granada,Spain,Europe,16990
-IES Abroad Granada - Study in Granada,Granada,Spain,Europe,
+IES Abroad Granada - Study in Granada,Granada,Spain,Europe,5849
 IES Abroad London - Business,London,United Kingdom,Europe,22432
 IES Abroad London - Film Studies,London,United Kingdom,Europe,22432
 IES Abroad London - Full-Time Semester Internship,London,United Kingdom,Europe,12990
@@ -474,7 +467,7 @@ IES Abroad Multi-location - Emerging Economies: Buenos Aires & Santiago,Multiple
 IES Abroad Nagoya Direct Enrollment - Nanzan University,Nagoya,Japan,Asia,19737
 IES Abroad Nantes - French Language Immersion & Area Studies,Nantes,France,Europe,20990
 "IES Abroad Nice - Business, Sustainability & Immigration",Nice,France,Europe,19800
-IES Abroad Nice Direct Enrollment‚Äö SKEMA Business School,Nice,France,Europe,19800
+IES Abroad Nice Direct Enrollment‚Äö√Ñ√∂ SKEMA Business School,Nice,France,Europe,19800
 IES Abroad Oxford Direct Enrollment - St. Catherine's College,Oxford,United Kingdom,Europe,27800
 IES Abroad Paris - Arts & Culture,Paris,France,Europe,20959
 IES Abroad Paris - Business & International Affairs,Paris,France,Europe,20959
@@ -507,20 +500,20 @@ IES Abroad Tokyo - Language & Culture,Tokyo,Japan,Asia,26779
 IES Abroad Vienna - European Society & Culture,Vienna,Austria,Europe,24250
 IES Abroad Vienna - Music,Vienna,Austria,Europe,24250
 IES Abroad Vienna - Psychology & Social Sciences,Vienna,Austria,Europe,24250
-Institut Teknologi Bandung (GE3 - Engineering),Bandung,Indonesia,Asia,
-Jagiellonian University(Exchange),Krakow,Poland,Europe,
-KAIST - Korea Advanced Institute of Science & Technology (GE3 - Engineering),Daejeon,South Korea,Asia,
-Khalifa University of Science and Technology (GE3 - Engineering),Abu Dhabi,United Arab Emirates,Middle East,
+Institut Teknologi Bandung (GE3 - Engineering),Bandung,Indonesia,Asia,0
+Jagiellonian University(Exchange),Krakow,Poland,Europe,0
+KAIST - Korea Advanced Institute of Science & Technology (GE3 - Engineering),Daejeon,South Korea,Asia,0
+Khalifa University of Science and Technology (GE3 - Engineering),Abu Dhabi,United Arab Emirates,Middle East,0
 Kingston University,London,United Kingdom,Europe,7362
-Koç University,Istanbul,Turkey,Middle East,
+Koc University,Istanbul,Turkey,Middle East,0
 Kyoto University,Kyoto,Japan,Asia,0
 Kyoto University(Exchange),Kyoto,Japan,Asia,0
-La Salle - Universitat Ramon Llull,Barcelona,Spain,Europe,
-Lisio Italian Studies: Florence Creative Writing Workshop,Florence,Italy,Europe,
-"Lisio Studies: Sustainability, Food, and Local Cultures",Bra,Italy,Europe,
-"Lisio Studies: Sustainability, Food, and Local Cultures",Arezzo,Italy,Europe,
-"Lisio Studies: Sustainability, Food, and Local Cultures",Naples,Italy,Europe,
-Lund University (GE3 - Engineering),Lund,Sweden,Europe,
+La Salle - Universitat Ramon Llull,Barcelona,Spain,Europe,0
+Lisio Italian Studies: Florence Creative Writing Workshop,Florence,Italy,Europe,0
+"Lisio Studies: Sustainability, Food, and Local Cultures",Bra,Italy,Europe,0
+"Lisio Studies: Sustainability, Food, and Local Cultures",Arezzo,Italy,Europe,0
+"Lisio Studies: Sustainability, Food, and Local Cultures",Naples,Italy,Europe,0
+Lund University (GE3 - Engineering),Lund,Sweden,Europe,0
 Mahidol University International College (MUIC),Salaya,Thailand,Asia,0
 Meiji Gakuin University,Tokyo,Japan,Asia,0
 Meiji Gakuin University(Exchange),Tokyo,Japan,Asia,0
@@ -531,66 +524,54 @@ Non-Rochester Program (Non-Credit),Multiple,Multiple,Multiple,0
 Non-Rochester SMD Student Travel (Credit-Bearing Elective),Multiple,Multiple,Multiple,0
 Non-Rochester SMD Student Travel (Non-Credit),Multiple,Multiple,Multiple,0
 Non-Rochester Study Abroad Program,Multiple,Multiple,Multiple,0
-Non-Rochester Summer Program,Multiple,Multiple,Multiple,
-POSTECH (Pohang University of Science & Technology) (GE3 - Engineering),Pohang-si,South Korea,Asia,
+Non-Rochester Summer Program,Multiple,Multiple,Multiple,0
+POSTECH (Pohang University of Science & Technology) (GE3 - Engineering),Pohang-si,South Korea,Asia,0
 Queen Mary University of London,London,United Kingdom,Europe,11000
-Queen Mary University of London Summer School,London,United Kingdom,Europe,
+Queen Mary University of London Summer School,London,United Kingdom,Europe,0
 Seoul National University,Seoul,South Korea,Asia,0
 Seoul National University - International Summer Program,Seoul,South Korea,Asia,0
 Seoul National University(Exchange),Seoul,South Korea,Asia,0
-SMD Medical Research - Full Year,Multiple,Multiple,Multiple,
+SMD Medical Research - Full Year,Multiple,Multiple,Multiple,0
 SMD Student Travel (Credit-Bearing Elective),Multiple,Multiple,Multiple,0
 Sogang University,Seoul,South Korea,Asia,3940
-Summer in Korea (Faculty Led),Seoul,South Korea,Asia,
+Summer in Korea (Faculty Led),Seoul,South Korea,Asia,0
 Summer Undergraduate Research Programme (SURP) at Chinese University Hong Kong,Hong Kong,China,Asia,0
-Tecnologico de Monterrey (GE3 - Engineering),Monterrey,Mexico,North America,
+Tecnologico de Monterrey (GE3 - Engineering),Monterrey,Mexico,North America,0
 The Intern Group: Global Internship and Cultural Immersion Program (Dublin),Dublin,Ireland,Europe,0
 The Intern Group: Global Internship and Cultural Immersion Program (London),London,United Kingdom,Europe,0
-The Intern Group: Global Internship and Cultural Immersion Program (Madrid),Madrid,Spain,Europe,
+The Intern Group: Global Internship and Cultural Immersion Program (Madrid),Madrid,Spain,Europe,0
 The Intern Group: Global Internship and Cultural Immersion Program (Melbourne),Melbourne,Australia,Australia/Pacific Islands,0
 The Intern Group: Remote Internship Program,Rochester,United States,North America,0
-Theatre in England (Faculty Led),London,United Kingdom,Europe,
-Universidad Del Pais Vasco (GE3 - Engineering),Bilbao,Spain,Europe,
-Universidad Panamericana IPADE Business School (Simon),Monterrey,Mexico,North America,
-Universidad Panamericana IPADE Business School (Simon),Mexico City,Mexico,Latin America,
-Universiti Teknologi Petronas,Seri Iskandar,Malaysia,Asia,
+Theatre in England (Faculty Led),London,United Kingdom,Europe,0
+Universidad Del Pais Vasco (GE3 - Engineering),Bilbao,Spain,Europe,0
+Universidad Panamericana IPADE Business School (Simon),Monterrey,Mexico,North America,0
+Universidad Panamericana IPADE Business School (Simon),Mexico City,Mexico,Latin America,0
+Universiti Teknologi Petronas,Seri Iskandar,Malaysia,Asia,0
 University College Dublin,Dublin,Ireland,Europe,7350
 University of Bristol,Bristol,United Kingdom,Europe,14550
 University of Bristol(Exchange),Bristol,United Kingdom,Europe,14550
 University of Canterbury,Christchurch,New Zealand,Australia/Pacific Islands,0
 University of Lausanne(Exchange),Lausanne,Switzerland,Europe,0
 University of Leeds,Leeds,United Kingdom,Europe,0
-University of Leeds International Summer School(Exchange),Leeds,United Kingdom,Europe,
+University of Leeds International Summer School(Exchange),Leeds,United Kingdom,Europe,0
 University of Leeds(Exchange),Leeds,United Kingdom,Europe,0
 University of Melbourne (GE3 - Engineering),Melbourne,Australia,Australia/Pacific Islands,0
 University of Newcastle,Callaghan,Australia,Oceania,0
 University of Newcastle (GE3 - Engineering),Newcastle,Australia,Australia/Pacific Islands,0
 University of Nicosia Global Semesters | Semester in Cyprus,Nicosia,Cyprus,Middle East,13300
-University of Rennes 1 - Economics(Exchange),Rennes,France,Europe,
-University of Sheffield (GE3 - Engineering),Sheffield,United Kingdom,Europe,
-University of Sussex(Exchange),Brighton,United Kingdom,Europe,
-University of Sydney - Spring Friendly,Sydney,Australia,Australia/Pacific Islands,
+University of Rennes 1 - Economics(Exchange),Rennes,France,Europe,0
+University of Sheffield (GE3 - Engineering),Sheffield,United Kingdom,Europe,0
+University of Sussex(Exchange),Brighton,United Kingdom,Europe,0
+University of Sydney - Spring Friendly,Sydney,Australia,Australia/Pacific Islands,12956
 University of Sydney Exchange - Direct Enrollment,Sydney,Australia,Australia/Pacific Islands,12956
 University of Sydney Exchange - Direct Enrollment(Exchange),Sydney,Australia,Australia/Pacific Islands,12956
-University of Twente (GE3 - Engineering),Enschede,Netherlands,Europe,
-University of Western Australia - UWAE(Exchange),Perth,Australia,Australia/Pacific Islands,
+University of Twente (GE3 - Engineering),Enschede,Netherlands,Europe,0
+University of Western Australia - UWAE(Exchange),Perth,Australia,Australia/Pacific Islands,0
 University of York,York,United Kingdom,Europe,0
-University of York - Summer School,York,United Kingdom,Europe,
+University of York - Summer School,York,United Kingdom,Europe,0
 University of York (Exchange),York,United Kingdom,Europe,0
-Victoria University of Wellington(Exchange),Wellington,New Zealand,Australia/Pacific Islands,
+Victoria University of Wellington(Exchange),Wellington,New Zealand,Australia/Pacific Islands,0
 Waseda University - Summer Session,Tokyo,Japan,Asia,0
 Waseda University(Exchange),Tokyo,Japan,Asia,0
 Yonsei University - International Summer School,Seoul,South Korea,Asia,0
 Yonsei University(Exchange),Seoul,South Korea,Asia,0
-
-
-
-
-
-
-
-
-
-
-
-
