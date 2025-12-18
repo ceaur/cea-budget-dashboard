@@ -392,8 +392,8 @@ College Year in Athens-Summer Program,Thessaloniki,Greece,Europe,
 Conversational Japanese in Tokyo,Tokyo,Japan,Asia,
 "DIS - Study Abroad in Copenhagen, Denmark",Copenhagen,Denmark,Europe,30840
 "DIS - Study Abroad in Stockholm, Sweden",Stockholm,Sweden,Europe,30840
-DIS Copenhagen - Summer Courses,Copenhagen,Denmark,Europe,
-DIS Stockholm - Summer Courses,Stockholm,Sweden,Europe,
+DIS Copenhagen - Summer Courses,Copenhagen,Denmark,Europe,0
+DIS Stockholm - Summer Courses,Stockholm,Sweden,Europe,0
 DTU - Technical University of Denmark (GE3 - Engineering),Lyngby,Denmark,Europe,
 ESM - Central Conservatory of Music,Beijing,China,Asia,
 ESM - China Conservatory of Music,Beijing,China,Asia,
@@ -448,7 +448,7 @@ IES Abroad Freiburg - Environmental Studies & Sustainability,Freiburg,Germany,Eu
 "IES Abroad Freiburg - European Union - Politics, Law & Economics",Freiburg,Germany,Europe,24918
 "IES Abroad Freiburg - European Union: Politics, Law & Economics",Freiburg,Germany,Europe,24918
 IES Abroad Freiburg - Language & Area Studies,Freiburg,Germany,Europe,21990
-IES Abroad Freiburg Summer - European Union: Politics & Economics,Freiburg,Germany,Europe,
+IES Abroad Freiburg Summer - European Union: Politics & Economics,Freiburg,Germany,Europe,0
 IES Abroad Granada - Liberal Arts & Language,Granada,Spain,Europe,16990
 IES Abroad Granada - Study in Granada,Granada,Spain,Europe,
 IES Abroad London - Business,London,United Kingdom,Europe,22432
@@ -536,13 +536,13 @@ POSTECH (Pohang University of Science & Technology) (GE3 - Engineering),Pohang-s
 Queen Mary University of London,London,United Kingdom,Europe,11000
 Queen Mary University of London Summer School,London,United Kingdom,Europe,
 Seoul National University,Seoul,South Korea,Asia,0
-Seoul National University - International Summer Program,Seoul,South Korea,Asia,
+Seoul National University - International Summer Program,Seoul,South Korea,Asia,0
 Seoul National University(Exchange),Seoul,South Korea,Asia,0
 SMD Medical Research - Full Year,Multiple,Multiple,Multiple,
 SMD Student Travel (Credit-Bearing Elective),Multiple,Multiple,Multiple,0
 Sogang University,Seoul,South Korea,Asia,3940
 Summer in Korea (Faculty Led),Seoul,South Korea,Asia,
-Summer Undergraduate Research Programme (SURP) at Chinese University Hong Kong,Hong Kong,China,Asia,
+Summer Undergraduate Research Programme (SURP) at Chinese University Hong Kong,Hong Kong,China,Asia,0
 Tecnologico de Monterrey (GE3 - Engineering),Monterrey,Mexico,North America,
 The Intern Group: Global Internship and Cultural Immersion Program (Dublin),Dublin,Ireland,Europe,0
 The Intern Group: Global Internship and Cultural Immersion Program (London),London,United Kingdom,Europe,0
@@ -582,6 +582,7 @@ Waseda University - Summer Session,Tokyo,Japan,Asia,
 Waseda University(Exchange),Tokyo,Japan,Asia,0
 Yonsei University - International Summer School,Seoul,South Korea,Asia,
 Yonsei University(Exchange),Seoul,South Korea,Asia,0
+
 
 
 
