@@ -26,12 +26,12 @@ from reportlab.lib.units import inch
 st.set_page_config(page_title="Education Abroad Budget Dashboard", layout="wide")
 st.title("Education Abroad Budget Dashboard")
 
+
 # =========================================================
 # CONSTANTS
 # =========================================================
 SUPPORTED_COST_EXTS = [".tsv", ".txt", ".csv", ".yaml", ".yml", ".json"]
 
-# statuses we consider "approved" for the dashboard
 APPROVED_STATUSES = [
     "Committed",
     "Accepted",
@@ -39,13 +39,13 @@ APPROVED_STATUSES = [
     "Provisional Permission",
 ]
 
-# and their priority for de-dup
 STATUS_PRIORITY = {
     "Committed": 4,
     "Accepted": 3,
     "Permission to Study Abroad: Granted": 2,
     "Provisional Permission": 1,
 }
+
 
 def status_rank(s: str) -> int:
     return STATUS_PRIORITY.get(str(s), 0)
@@ -72,10 +72,12 @@ def _candidate_dirs():
             out.append(dp)
     return out
 
+
 def file_md5(path: Path) -> str:
     if not path or not path.exists():
         return ""
     return hashlib.md5(path.read_bytes()).hexdigest()
+
 
 # filenames like: spring_2026_budget-2025-10-30-10_30_00.csv
 def parse_new_budget_name(stem: str) -> datetime | None:
@@ -88,13 +90,17 @@ def parse_new_budget_name(stem: str) -> datetime | None:
     except ValueError:
         return None
 
+
 def find_latest_app_file() -> Path | None:
     data_dir = Path("./data")
     if not data_dir.exists():
         return None
 
+    # include .csv and .CSV (Linux is case-sensitive)
+    csv_files = list(data_dir.glob("*.csv")) + list(data_dir.glob("*.CSV"))
+
     candidates: list[tuple[Path, datetime, datetime]] = []
-    for p in data_dir.glob("*.csv"):
+    for p in csv_files:
         parsed = parse_new_budget_name(p.stem)
         if parsed is None:
             continue
@@ -111,6 +117,7 @@ def find_latest_app_file() -> Path | None:
 
     candidates.sort(key=lambda t: (t[1], t[2]))
     return candidates[-1][0]
+
 
 def parse_timestamp_label(stem: str) -> str:
     dt = parse_new_budget_name(stem)
@@ -141,6 +148,7 @@ def _read_csv_forgiving(path_or_buf, sep=",", dtype=str):
             last_err = e
     raise last_err
 
+
 def _clean_col(c: str) -> str:
     return (
         str(c)
@@ -149,13 +157,14 @@ def _clean_col(c: str) -> str:
         .strip()
     )
 
+
 def read_any_apps_file(file_obj_or_path):
     """Read CSV or TXT/TSV and normalize headers/values."""
     if file_obj_or_path is None:
         return None
 
     name = getattr(file_obj_or_path, "name", str(file_obj_or_path))
-    if name and name.lower().endswith((".txt", ".tsv")):
+    if name and str(name).lower().endswith((".txt", ".tsv")):
         df = _read_csv_forgiving(file_obj_or_path, sep="\t", dtype=str)
     else:
         df = _read_csv_forgiving(file_obj_or_path, sep=",", dtype=str)
@@ -178,6 +187,7 @@ def _read_text(path: Path) -> str:
             continue
     return path.read_bytes().decode("utf-8", errors="replace")
 
+
 def normalize_currency(s):
     if pd.isna(s):
         return pd.NA
@@ -189,6 +199,7 @@ def normalize_currency(s):
     except Exception:
         return pd.NA
 
+
 def coalesce_program_keys(name):
     if pd.isna(name):
         return None
@@ -197,6 +208,7 @@ def coalesce_program_keys(name):
     s = s.replace("’", "'").replace("“", '"').replace("”", '"')
     s = re.sub(r"\s+", " ", s)
     return s
+
 
 @st.cache_data(show_spinner=False, ttl=0)
 def load_costs_from_repo(path: Path, content_hash: str) -> pd.DataFrame:
@@ -270,6 +282,7 @@ def load_costs_from_repo(path: Path, content_hash: str) -> pd.DataFrame:
     df = df[~df["__Program"].isna() & (df["__Program"].astype(str).str.strip() != "")]
     return df[["__Program", "__Cost", "City", "Country", "Region"]]
 
+
 def find_cost_file() -> Path | None:
     candidates = []
     for d in _candidate_dirs():
@@ -341,6 +354,7 @@ def build_student_key(df: pd.DataFrame) -> pd.Series:
         + df.get("__Program", pd.Series([""] * len(df))).astype(str).str.lower()
     )
 
+
 def dedup_students_by_priority_then_cost(df_apps: pd.DataFrame, df_costs: pd.DataFrame) -> pd.DataFrame:
     """
     Keeps 1 record per student:
@@ -350,7 +364,6 @@ def dedup_students_by_priority_then_cost(df_apps: pd.DataFrame, df_costs: pd.Dat
     if df_apps.empty:
         return df_apps
 
-    # costs might include City/Country/Region; only need __Program + __Cost for ranking
     costs = df_costs.rename(
         columns={"__Program": "__Program_cost_key", "__Cost": "__CostValue"}
     ).copy()
@@ -394,7 +407,6 @@ def aggregate_by_program_status(df, costs):
         .reset_index(name="Student Count")
     )
 
-    # merge ONLY what we need for budget math
     merged = counts.merge(costs[["__Program", "__Cost"]], on="__Program", how="left")
 
     merged["Program"] = merged["__Program"]
@@ -406,20 +418,33 @@ def aggregate_by_program_status(df, costs):
         ["Program", "Status", "Student Count", "Cost per Student (USD)", "Budget (USD)"]
     ]
 
+
 def kpi_row(df):
     total_students = int(df["Student Count"].sum()) if not df.empty else 0
     total_budget = df["Budget (USD)"].sum(min_count=1) if not df.empty else pd.NA
     return total_students, total_budget
+
 
 def fmt_money(x):
     return "-" if pd.isna(x) else f"${x:,.0f}"
 
 
 # =========================================================
-# SIDEBAR: FILE PICKER
+# SIDEBAR: FILE PICKER + DEBUG
 # =========================================================
 st.sidebar.header("Applications Data")
-uploaded_apps = st.sidebar.file_uploader("Upload file (CSV or TXT)", type=["csv", "txt", "tsv"])
+
+BUILD_MARKER = "2025-12-19 v1 (debug marker)"
+st.sidebar.success(f"DEBUG build marker ✅ {BUILD_MARKER}")
+st.sidebar.write(
+    "Server time:",
+    datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M:%S %Z"),
+)
+
+uploaded_apps = st.sidebar.file_uploader(
+    "Upload file (CSV or TXT)",
+    type=["csv", "CSV", "txt", "tsv"],
+)
 
 if "use_repo_default" not in st.session_state:
     st.session_state.use_repo_default = True
@@ -431,79 +456,48 @@ if st.sidebar.button("Use latest repository file"):
     st.session_state.use_repo_default = True
 
 DEFAULT_APPS_PATH = find_latest_app_file()
+
 if st.session_state.use_repo_default:
     if DEFAULT_APPS_PATH:
         st.sidebar.success(f"Source: {DEFAULT_APPS_PATH.name} ({parse_timestamp_label(DEFAULT_APPS_PATH.stem)})")
     else:
-        st.sidebar.warning("No application file detected in ./data.")
+        st.sidebar.warning("No application file detected in ./data (or none matched the timestamp pattern).")
 else:
-    st.sidebar.info("Source: uploaded file (session only)")
+    st.sidebar.info("Source: uploaded file (session only). Click 'Use latest repository file' to switch back.")
 
-# with st.sidebar.expander("DEBUG: repo ./data scan"):
-#     data_dir = Path("./data")
-#     st.write("CWD:", Path(".").resolve())
-#     st.write("./data exists:", data_dir.exists())
-#     csvs = sorted([p.name for p in data_dir.glob("*.csv")])
-#     st.write("CSV files found:", csvs)
-
-#     parsed_ok = []
-#     parsed_fail = []
-#     for p in data_dir.glob("*.csv"):
-#         (parsed_ok if parse_new_budget_name(p.stem) else parsed_fail).append(p.name)
-
-#     st.write("Parsed OK:", parsed_ok)
-#     st.write("Parsed FAIL:", parsed_fail)
-#     st.write("Selected DEFAULT_APPS_PATH:", str(DEFAULT_APPS_PATH) if DEFAULT_APPS_PATH else None)
-with st.sidebar.expander("DEBUG: repo ./data scan"):
+with st.sidebar.expander("DEBUG: repo ./data scan", expanded=True):
     data_dir = Path("./data")
-    st.sidebar.write("use_repo_default:", st.session_state.use_repo_default)
-    st.sidebar.write("CWD:", Path(".").resolve())
+    st.sidebar.write("CWD:", str(Path(".").resolve()))
     st.sidebar.write("./data exists:", data_dir.exists())
+    st.sidebar.write("use_repo_default:", st.session_state.use_repo_default)
 
-    csv_paths = sorted(list(data_dir.glob("*.csv")))
-    st.sidebar.write("CSV files found:", [p.name for p in csv_paths])
+    if not data_dir.exists():
+        st.sidebar.error("Folder './data' does not exist in the deployed app.")
+    else:
+        try:
+            all_files = sorted([p.name for p in data_dir.iterdir()])
+        except Exception as e:
+            all_files = []
+            st.sidebar.error(f"Could not list ./data: {e}")
+        st.sidebar.write("All files in ./data:", all_files)
 
-    parsed_ok = []
-    parsed_fail = []
-    for p in csv_paths:
-        (parsed_ok if parse_new_budget_name(p.stem) else parsed_fail).append(p.name)
+        csv_paths = sorted(list(data_dir.glob("*.csv")) + list(data_dir.glob("*.CSV")))
+        st.sidebar.write("CSV files found:", [p.name for p in csv_paths])
 
-    st.sidebar.write("Parsed OK:", parsed_ok)
-    st.sidebar.write("Parsed FAIL:", parsed_fail)
-    st.sidebar.write("Selected DEFAULT_APPS_PATH:", str(DEFAULT_APPS_PATH) if DEFAULT_APPS_PATH else None)
-    
+        parsed_ok, parsed_fail = [], []
+        for p in csv_paths:
+            (parsed_ok if parse_new_budget_name(p.stem) else parsed_fail).append(p.name)
+
+        st.sidebar.write("Parsed OK:", parsed_ok)
+        st.sidebar.write("Parsed FAIL:", parsed_fail)
+        st.sidebar.write("Selected DEFAULT_APPS_PATH:", str(DEFAULT_APPS_PATH) if DEFAULT_APPS_PATH else None)
+
 
 # =========================================================
 # LOAD COSTS
 # =========================================================
 COST_FILE_PATH = find_cost_file()
 COSTS = load_costs_from_repo(COST_FILE_PATH, file_md5(COST_FILE_PATH))
-
-# # Sidebar: Cost coverage by Region
-# with st.sidebar.expander("Cost Coverage (by Region)", expanded=False):
-#     if COSTS.empty:
-#         st.write("No cost file loaded (or missing required columns).")
-#     else:
-#         total_programs = COSTS["__Program"].nunique(dropna=True)
-#         missing_cost = int(COSTS["__Cost"].isna().sum())
-#         st.write(f"Programs in cost file: **{total_programs:,}**")
-#         st.write(f"Rows missing Cost: **{missing_cost:,}**")
-
-#         # Coverage table
-#         cov = COSTS.copy()
-#         cov["Region"] = cov["Region"].fillna("(missing)")
-#         cov["Has Cost"] = ~cov["__Cost"].isna()
-#         by_region = (
-#             cov.groupby("Region", dropna=False)
-#             .agg(
-#                 Programs=("__Program", "nunique"),
-#                 With_Cost=("Has Cost", "sum"),
-#             )
-#             .reset_index()
-#         )
-#         by_region["Coverage %"] = (by_region["With_Cost"] / by_region["Programs"]).where(by_region["Programs"] > 0) * 100
-#         by_region = by_region.sort_values(["Coverage %", "Programs"], ascending=[False, False])
-#         st.dataframe(by_region, use_container_width=True)
 
 
 # =========================================================
@@ -514,7 +508,9 @@ apps_df = (
     if st.session_state.use_repo_default
     else read_any_apps_file(uploaded_apps)
 )
+
 if apps_df is None or apps_df.empty:
+    st.error("Applications data could not be loaded (file missing, unreadable, or empty). Check the DEBUG panel above.")
     st.stop()
 
 
@@ -645,6 +641,7 @@ for label in [
     if label and label in apps_df.columns and label not in student_cols_preferred:
         student_cols_preferred.append(label)
 
+
 def build_student_export(df):
     if df.empty:
         return pd.DataFrame()
@@ -652,6 +649,7 @@ def build_student_export(df):
     export = df[cols].copy()
     export.columns = [c.replace("_", " ").strip() for c in export.columns]
     return export
+
 
 confirmed_students_export = build_student_export(confirmed)
 pending_students_export = build_student_export(pending)
@@ -720,6 +718,7 @@ def totals_by(df):
     )
     return t
 
+
 summary = pd.concat(
     [totals_by(agg_confirmed), totals_by(agg_pending)],
     ignore_index=True,
@@ -776,7 +775,7 @@ def build_docx_report() -> bytes:
         for _, r in summary.iterrows():
             row = table.add_row().cells
             row[0].text = str(r["Status"])
-            row[1].text = f'{int(r["Students"]):,}'
+            row[1].text = f"{int(r['Students']):,}"
             val = r["Budget"]
             row[2].text = "-" if pd.isna(val) else f"${val:,.0f}"
     else:
@@ -785,6 +784,7 @@ def build_docx_report() -> bytes:
     bio = io.BytesIO()
     doc.save(bio)
     return bio.getvalue()
+
 
 def build_pdf_report() -> bytes:
     bio = io.BytesIO()
@@ -833,6 +833,7 @@ def build_pdf_report() -> bytes:
     c.drawString(1.0 * inch, y, "Budget Summary by Status")
     y -= 0.25 * inch
     c.setFont("Helvetica", 10)
+
     if summary.empty:
         c.drawString(1.0 * inch, y, "No summary available for current filters.")
     else:
