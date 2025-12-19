@@ -439,6 +439,21 @@ if st.session_state.use_repo_default:
 else:
     st.sidebar.info("Source: uploaded file (session only)")
 
+with st.sidebar.expander("DEBUG: repo ./data scan"):
+    data_dir = Path("./data")
+    st.write("CWD:", Path(".").resolve())
+    st.write("./data exists:", data_dir.exists())
+    csvs = sorted([p.name for p in data_dir.glob("*.csv")])
+    st.write("CSV files found:", csvs)
+
+    parsed_ok = []
+    parsed_fail = []
+    for p in data_dir.glob("*.csv"):
+        (parsed_ok if parse_new_budget_name(p.stem) else parsed_fail).append(p.name)
+
+    st.write("Parsed OK:", parsed_ok)
+    st.write("Parsed FAIL:", parsed_fail)
+    st.write("Selected DEFAULT_APPS_PATH:", str(DEFAULT_APPS_PATH) if DEFAULT_APPS_PATH else None)
 
 # =========================================================
 # LOAD COSTS
