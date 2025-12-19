@@ -19,19 +19,18 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import LETTER
 from reportlab.lib.units import inch
 
-
 # =========================================================
 # STREAMLIT CONFIG
 # =========================================================
 st.set_page_config(page_title="Education Abroad Budget Dashboard", layout="wide")
 st.title("Education Abroad Budget Dashboard")
 
-
 # =========================================================
 # CONSTANTS
 # =========================================================
 SUPPORTED_COST_EXTS = [".tsv", ".txt", ".csv", ".yaml", ".yml", ".json"]
 
+# statuses we consider "approved" for the dashboard
 APPROVED_STATUSES = [
     "Committed",
     "Accepted",
@@ -39,6 +38,7 @@ APPROVED_STATUSES = [
     "Provisional Permission",
 ]
 
+# and their priority for de-dup
 STATUS_PRIORITY = {
     "Committed": 4,
     "Accepted": 3,
@@ -46,10 +46,8 @@ STATUS_PRIORITY = {
     "Provisional Permission": 1,
 }
 
-
 def status_rank(s: str) -> int:
     return STATUS_PRIORITY.get(str(s), 0)
-
 
 # =========================================================
 # PATH / FILE HELPERS
@@ -72,12 +70,10 @@ def _candidate_dirs():
             out.append(dp)
     return out
 
-
 def file_md5(path: Path) -> str:
     if not path or not path.exists():
         return ""
     return hashlib.md5(path.read_bytes()).hexdigest()
-
 
 # filenames like: spring_2026_budget-2025-10-30-10_30_00.csv
 def parse_new_budget_name(stem: str) -> datetime | None:
@@ -90,17 +86,13 @@ def parse_new_budget_name(stem: str) -> datetime | None:
     except ValueError:
         return None
 
-
 def find_latest_app_file() -> Path | None:
     data_dir = Path("./data")
     if not data_dir.exists():
         return None
 
-    # include .csv and .CSV (Linux is case-sensitive)
-    csv_files = list(data_dir.glob("*.csv")) + list(data_dir.glob("*.CSV"))
-
     candidates: list[tuple[Path, datetime, datetime]] = []
-    for p in csv_files:
+    for p in data_dir.glob("*.csv"):
         parsed = parse_new_budget_name(p.stem)
         if parsed is None:
             continue
@@ -118,14 +110,12 @@ def find_latest_app_file() -> Path | None:
     candidates.sort(key=lambda t: (t[1], t[2]))
     return candidates[-1][0]
 
-
 def parse_timestamp_label(stem: str) -> str:
     dt = parse_new_budget_name(stem)
     if dt is None:
         return stem
     et = dt.replace(tzinfo=ZoneInfo("America/New_York"))
     return et.strftime("%Y-%m-%d %H:%M:%S %Z")
-
 
 # =========================================================
 # GENERIC READERS
@@ -148,7 +138,6 @@ def _read_csv_forgiving(path_or_buf, sep=",", dtype=str):
             last_err = e
     raise last_err
 
-
 def _clean_col(c: str) -> str:
     return (
         str(c)
@@ -157,14 +146,13 @@ def _clean_col(c: str) -> str:
         .strip()
     )
 
-
 def read_any_apps_file(file_obj_or_path):
     """Read CSV or TXT/TSV and normalize headers/values."""
     if file_obj_or_path is None:
         return None
 
     name = getattr(file_obj_or_path, "name", str(file_obj_or_path))
-    if name and str(name).lower().endswith((".txt", ".tsv")):
+    if name and name.lower().endswith((".txt", ".tsv")):
         df = _read_csv_forgiving(file_obj_or_path, sep="\t", dtype=str)
     else:
         df = _read_csv_forgiving(file_obj_or_path, sep=",", dtype=str)
@@ -174,7 +162,6 @@ def read_any_apps_file(file_obj_or_path):
         if df[c].dtype == object:
             df[c] = df[c].astype(str).str.replace("\u00a0", " ").str.strip()
     return df
-
 
 # =========================================================
 # COSTS
@@ -187,7 +174,6 @@ def _read_text(path: Path) -> str:
             continue
     return path.read_bytes().decode("utf-8", errors="replace")
 
-
 def normalize_currency(s):
     if pd.isna(s):
         return pd.NA
@@ -199,7 +185,6 @@ def normalize_currency(s):
     except Exception:
         return pd.NA
 
-
 def coalesce_program_keys(name):
     if pd.isna(name):
         return None
@@ -208,7 +193,6 @@ def coalesce_program_keys(name):
     s = s.replace("’", "'").replace("“", '"').replace("”", '"')
     s = re.sub(r"\s+", " ", s)
     return s
-
 
 @st.cache_data(show_spinner=False, ttl=0)
 def load_costs_from_repo(path: Path, content_hash: str) -> pd.DataFrame:
@@ -282,7 +266,6 @@ def load_costs_from_repo(path: Path, content_hash: str) -> pd.DataFrame:
     df = df[~df["__Program"].isna() & (df["__Program"].astype(str).str.strip() != "")]
     return df[["__Program", "__Cost", "City", "Country", "Region"]]
 
-
 def find_cost_file() -> Path | None:
     candidates = []
     for d in _candidate_dirs():
@@ -295,7 +278,6 @@ def find_cost_file() -> Path | None:
     preference = {".tsv": 0, ".txt": 0, ".csv": 1, ".yaml": 2, ".yml": 2, ".json": 3}
     candidates.sort(key=lambda p: (preference.get(p.suffix.lower(), 9), str(p)))
     return candidates[0]
-
 
 # =========================================================
 # COLUMN RESOLUTION (applications)
@@ -323,7 +305,6 @@ def resolve_columns(df: pd.DataFrame):
             resolved[key] = found
     missing = [k for k in expected if k not in resolved]
     return resolved, missing
-
 
 # =========================================================
 # DEDUP BY STUDENT (priority + cost)
@@ -354,7 +335,6 @@ def build_student_key(df: pd.DataFrame) -> pd.Series:
         + df.get("__Program", pd.Series([""] * len(df))).astype(str).str.lower()
     )
 
-
 def dedup_students_by_priority_then_cost(df_apps: pd.DataFrame, df_costs: pd.DataFrame) -> pd.DataFrame:
     """
     Keeps 1 record per student:
@@ -364,6 +344,7 @@ def dedup_students_by_priority_then_cost(df_apps: pd.DataFrame, df_costs: pd.Dat
     if df_apps.empty:
         return df_apps
 
+    # costs might include City/Country/Region; only need __Program + __Cost for ranking
     costs = df_costs.rename(
         columns={"__Program": "__Program_cost_key", "__Cost": "__CostValue"}
     ).copy()
@@ -384,7 +365,6 @@ def dedup_students_by_priority_then_cost(df_apps: pd.DataFrame, df_costs: pd.Dat
     tmp = tmp.drop_duplicates(subset="__StudentKey", keep="first")
 
     return tmp.drop(columns=["__StudentKey", "__Rank", "__Program_cost_key", "__CostValue"], errors="ignore")
-
 
 # =========================================================
 # AGGREGATION
@@ -407,6 +387,7 @@ def aggregate_by_program_status(df, costs):
         .reset_index(name="Student Count")
     )
 
+    # merge ONLY what we need for budget math
     merged = counts.merge(costs[["__Program", "__Cost"]], on="__Program", how="left")
 
     merged["Program"] = merged["__Program"]
@@ -418,97 +399,37 @@ def aggregate_by_program_status(df, costs):
         ["Program", "Status", "Student Count", "Cost per Student (USD)", "Budget (USD)"]
     ]
 
-
 def kpi_row(df):
     total_students = int(df["Student Count"].sum()) if not df.empty else 0
     total_budget = df["Budget (USD)"].sum(min_count=1) if not df.empty else pd.NA
     return total_students, total_budget
 
-
 def fmt_money(x):
     return "-" if pd.isna(x) else f"${x:,.0f}"
 
-
 # =========================================================
-# SIDEBAR: FILE PICKER + DEBUGS
+# SIDEBAR: FILE PICKER
 # =========================================================
 st.sidebar.header("Applications Data")
-
-BUILD_MARKER = "2025-12-19 v2 upload-debug"
-st.sidebar.success(f"DEBUG build marker ✅ {BUILD_MARKER}")
-st.sidebar.write(
-    "Server time:",
-    datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M:%S %Z"),
-)
-
-uploaded_apps = st.sidebar.file_uploader(
-    "Upload file (CSV or TXT)",
-    type=["csv", "CSV", "txt", "tsv"],
-)
-
-# Upload receipt debug (THIS is what you need)
-if uploaded_apps is not None:
-    st.sidebar.success(f"Uploaded file detected ✅: {uploaded_apps.name}")
-else:
-    st.sidebar.warning("No uploaded file detected yet.")
+uploaded_apps = st.sidebar.file_uploader("Upload file (CSV or TXT)", type=["csv", "txt", "tsv"])
 
 if "use_repo_default" not in st.session_state:
     st.session_state.use_repo_default = True
 
-# If user uploads, switch to upload mode
 if uploaded_apps is not None:
     st.session_state.use_repo_default = False
 
-# Explicit switch back to repo
 if st.sidebar.button("Use latest repository file"):
     st.session_state.use_repo_default = True
 
 DEFAULT_APPS_PATH = find_latest_app_file()
-
-# Clear active source banner
 if st.session_state.use_repo_default:
-    st.sidebar.info("ACTIVE MODE: Repository file")
     if DEFAULT_APPS_PATH:
         st.sidebar.success(f"Source: {DEFAULT_APPS_PATH.name} ({parse_timestamp_label(DEFAULT_APPS_PATH.stem)})")
     else:
-        st.sidebar.warning("No application file detected in ./data (or none matched the timestamp pattern).")
+        st.sidebar.warning("No application file detected in ./data.")
 else:
-    st.sidebar.info("ACTIVE MODE: Uploaded file (session only)")
-    if uploaded_apps is not None:
-        st.sidebar.success(f"Source: {uploaded_apps.name}")
-    else:
-        st.sidebar.error("Upload mode selected but uploaded file is missing (uploaded_apps is None).")
-
-with st.sidebar.expander("DEBUG: repo ./data scan", expanded=False):
-    data_dir = Path("./data")
-    st.sidebar.write("CWD:", str(Path(".").resolve()))
-    st.sidebar.write("./data exists:", data_dir.exists())
-    st.sidebar.write("use_repo_default:", st.session_state.use_repo_default)
-    st.sidebar.write("uploaded_apps is None:", uploaded_apps is None)
-    if uploaded_apps is not None:
-        st.sidebar.write("uploaded_apps.name:", uploaded_apps.name)
-
-    if not data_dir.exists():
-        st.sidebar.error("Folder './data' does not exist in the deployed app.")
-    else:
-        try:
-            all_files = sorted([p.name for p in data_dir.iterdir()])
-        except Exception as e:
-            all_files = []
-            st.sidebar.error(f"Could not list ./data: {e}")
-        st.sidebar.write("All files in ./data:", all_files)
-
-        csv_paths = sorted(list(data_dir.glob("*.csv")) + list(data_dir.glob("*.CSV")))
-        st.sidebar.write("CSV files found:", [p.name for p in csv_paths])
-
-        parsed_ok, parsed_fail = [], []
-        for p in csv_paths:
-            (parsed_ok if parse_new_budget_name(p.stem) else parsed_fail).append(p.name)
-
-        st.sidebar.write("Parsed OK:", parsed_ok)
-        st.sidebar.write("Parsed FAIL:", parsed_fail)
-        st.sidebar.write("Selected DEFAULT_APPS_PATH:", str(DEFAULT_APPS_PATH) if DEFAULT_APPS_PATH else None)
-
+    st.sidebar.info("Source: uploaded file (session only)")
 
 # =========================================================
 # LOAD COSTS
@@ -516,29 +437,42 @@ with st.sidebar.expander("DEBUG: repo ./data scan", expanded=False):
 COST_FILE_PATH = find_cost_file()
 COSTS = load_costs_from_repo(COST_FILE_PATH, file_md5(COST_FILE_PATH))
 
+# # Sidebar: Cost coverage by Region
+# with st.sidebar.expander("Cost Coverage (by Region)", expanded=False):
+#     if COSTS.empty:
+#         st.write("No cost file loaded (or missing required columns).")
+#     else:
+#         total_programs = COSTS["__Program"].nunique(dropna=True)
+#         missing_cost = int(COSTS["__Cost"].isna().sum())
+#         st.write(f"Programs in cost file: **{total_programs:,}**")
+#         st.write(f"Rows missing Cost: **{missing_cost:,}**")
+
+#         # Coverage table
+#         cov = COSTS.copy()
+#         cov["Region"] = cov["Region"].fillna("(missing)")
+#         cov["Has Cost"] = ~cov["__Cost"].isna()
+#         by_region = (
+#             cov.groupby("Region", dropna=False)
+#             .agg(
+#                 Programs=("__Program", "nunique"),
+#                 With_Cost=("Has Cost", "sum"),
+#             )
+#             .reset_index()
+#         )
+#         by_region["Coverage %"] = (by_region["With_Cost"] / by_region["Programs"]).where(by_region["Programs"] > 0) * 100
+#         by_region = by_region.sort_values(["Coverage %", "Programs"], ascending=[False, False])
+#         st.dataframe(by_region, use_container_width=True)
 
 # =========================================================
-# LOAD APPLICATIONS (with debug)
+# LOAD APPLICATIONS
 # =========================================================
-source_label = None
-if st.session_state.use_repo_default:
-    source_label = f"REPO: {DEFAULT_APPS_PATH.name if DEFAULT_APPS_PATH else 'None'}"
-else:
-    source_label = f"UPLOAD: {uploaded_apps.name if uploaded_apps is not None else 'None'}"
-st.sidebar.write("DEBUG selected source:", source_label)
-
 apps_df = (
     read_any_apps_file(DEFAULT_APPS_PATH)
     if st.session_state.use_repo_default
     else read_any_apps_file(uploaded_apps)
 )
-
 if apps_df is None or apps_df.empty:
-    st.error("Applications data could not be loaded (missing/unreadable/empty). Check sidebar DEBUG indicators.")
     st.stop()
-
-st.sidebar.success(f"DEBUG loaded apps_df ✅ rows={len(apps_df):,} cols={apps_df.shape[1]}")
-
 
 # =========================================================
 # RESOLVE REQUIRED COLUMNS
@@ -566,7 +500,6 @@ if missing:
     st.write("DEBUG headers:", list(apps_df.columns))
     st.stop()
 
-
 # =========================================================
 # NORMALIZE KEY COLS
 # =========================================================
@@ -574,7 +507,6 @@ apps_df["__Program"] = apps_df[resolved["Program_Name"]].map(coalesce_program_ke
 apps_df["__Status"] = apps_df[resolved["Application_Status"]].fillna("")
 apps_df["__Term"] = apps_df[resolved.get("Program_Term", "")] if "Program_Term" in resolved else ""
 apps_df["__Year"] = apps_df[resolved.get("Program_Year", "")] if "Program_Year" in resolved else ""
-
 
 # =========================================================
 # FILTERS
@@ -591,12 +523,10 @@ if term != "(all)":
 if year != "(all)":
     filtered = filtered[filtered["__Year"] == year]
 
-
 # =========================================================
 # DEDUP (priority + cost)
 # =========================================================
 filtered = dedup_students_by_priority_then_cost(filtered, COSTS)
-
 
 # =========================================================
 # SPLIT COHORTS
@@ -605,7 +535,6 @@ confirmed = filtered[filtered["__Status"].isin(APPROVED_STATUSES)].copy()
 pending = filtered[~filtered["__Status"].isin(APPROVED_STATUSES)].copy()
 confirmed["__Group"] = "Approved"
 pending["__Group"] = "Pending"
-
 
 # =========================================================
 # AGGREGATION + KPIs
@@ -633,7 +562,6 @@ with k5:
 with k6:
     st.metric("Total Budget Exposure", fmt_money(total_budget))
 
-
 # =========================================================
 # TABLES
 # =========================================================
@@ -648,7 +576,6 @@ if agg_pending.empty:
     st.write("No records for the current filters.")
 else:
     st.dataframe(agg_pending.sort_values(["Program", "Status"]), use_container_width=True)
-
 
 # =========================================================
 # STUDENT EXPORTS
@@ -667,7 +594,6 @@ for label in [
     if label and label in apps_df.columns and label not in student_cols_preferred:
         student_cols_preferred.append(label)
 
-
 def build_student_export(df):
     if df.empty:
         return pd.DataFrame()
@@ -675,7 +601,6 @@ def build_student_export(df):
     export = df[cols].copy()
     export.columns = [c.replace("_", " ").strip() for c in export.columns]
     return export
-
 
 confirmed_students_export = build_student_export(confirmed)
 pending_students_export = build_student_export(pending)
@@ -729,156 +654,186 @@ with c3:
             mime="text/csv",
         )
 
-
 # =========================================================
 # SUMMARY
 # =========================================================
-
 def totals_by(df):
-    """Summarize a program-status table into totals by Status."""
     if df.empty:
         return pd.DataFrame(columns=["Status", "Students", "Budget"])
-
     t = (
         df.groupby("Status", dropna=False)[["Student Count", "Budget (USD)"]]
         .sum(min_count=1)
         .reset_index()
         .rename(columns={"Student Count": "Students", "Budget (USD)": "Budget"})
     )
-    t["Students"] = t["Students"].fillna(0).astype(int)
     return t
 
-
-def add_total_row(df, label="TOTAL"):
-    if df.empty:
-        return df
-    total_students = int(df["Students"].sum())
-    total_budget = df["Budget"].sum(min_count=1)
-    total_row = pd.DataFrame([{"Status": label, "Students": total_students, "Budget": total_budget}])
-    return pd.concat([df, total_row], ignore_index=True)
-
-
-def fmt_summary(df):
-    """Pretty formatting for display (keeps numeric columns too)."""
-    out = df.copy()
-    out["Budget"] = out["Budget"].map(fmt_money)
-    out["Students"] = out["Students"].map(lambda x: f"{int(x):,}")
-    return out
-
-
-# 1) Summary by Status (Approved + Pending combined)
-summary_by_status = pd.concat(
+summary = pd.concat(
     [totals_by(agg_confirmed), totals_by(agg_pending)],
     ignore_index=True,
 )
-# combine duplicate statuses across cohorts
-if not summary_by_status.empty:
-    summary_by_status = (
-        summary_by_status.groupby("Status", dropna=False)[["Students", "Budget"]]
-        .sum(min_count=1)
-        .reset_index()
-        .sort_values(["Budget", "Students"], ascending=[False, False])
-    )
-
-summary_by_status = add_total_row(summary_by_status, label="TOTAL")
 
 st.subheader("Budget Summary by Status")
-if summary_by_status.empty:
-    st.write("No summary available for current filters.")
-else:
-    st.dataframe(fmt_summary(summary_by_status), use_container_width=True)
+st.dataframe(summary, use_container_width=True)
 
+# =========================================================
+# DIAGNOSTICS (missing mapping)
+# =========================================================
+all_agg = pd.concat([agg_confirmed, agg_pending], ignore_index=True)
+missing_cost_programs = sorted(
+    all_agg[all_agg["Cost per Student (USD)"].isna()]["Program"]
+    .dropna()
+    .unique()
+    .tolist()
+)
+if missing_cost_programs:
+    with st.expander("Programs Missing Cost Mapping"):
+        st.write(missing_cost_programs)
 
-# 2) Summary by Cohort (Approved vs Pending)
-cohort_summary = pd.DataFrame(
-    [
-        {"Cohort": "Approved", "Students": conf_students, "Budget": conf_budget},
-        {"Cohort": "Pending", "Students": pend_students, "Budget": pend_budget},
+# =========================================================
+# REPORTS
+# =========================================================
+def build_docx_report() -> bytes:
+    doc = Document()
+    doc.add_heading("Education Abroad Budget Snapshot", level=1)
+
+    dt_label = datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M:%S %Z")
+    src_label = (
+        DEFAULT_APPS_PATH.name
+        if (st.session_state.use_repo_default and DEFAULT_APPS_PATH)
+        else "Uploaded file"
+    )
+    doc.add_paragraph(f"Generated: {dt_label}")
+    doc.add_paragraph(f"Data source: {src_label}")
+
+    doc.add_heading("Key Metrics", level=2)
+    doc.add_paragraph(f"Confirmed Students: {conf_students:,}")
+    doc.add_paragraph(f"Confirmed Budget Exposure: {fmt_money(conf_budget)}")
+    doc.add_paragraph(f"Pending Students: {pend_students:,}")
+    doc.add_paragraph(f"Pending Budget Exposure: {fmt_money(pend_budget)}")
+    doc.add_paragraph(f"Total Students: {total_students:,}")
+    doc.add_paragraph(f"Total Budget Exposure: {fmt_money(total_budget)}")
+
+    doc.add_heading("Budget Summary by Status", level=2)
+    if not summary.empty:
+        table = doc.add_table(rows=1, cols=3)
+        hdr = table.rows[0].cells
+        hdr[0].text, hdr[1].text, hdr[2].text = "Status", "Students", "Budget"
+        for _, r in summary.iterrows():
+            row = table.add_row().cells
+            row[0].text = str(r["Status"])
+            row[1].text = f'{int(r["Students"]):,}'
+            val = r["Budget"]
+            row[2].text = "-" if pd.isna(val) else f"${val:,.0f}"
+    else:
+        doc.add_paragraph("No summary available for current filters.")
+
+    bio = io.BytesIO()
+    doc.save(bio)
+    return bio.getvalue()
+
+def build_pdf_report() -> bytes:
+    bio = io.BytesIO()
+    c = canvas.Canvas(bio, pagesize=LETTER)
+    width, height = LETTER
+    y = height - 1.0 * inch
+
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(1.0 * inch, y, "Education Abroad Budget Snapshot")
+    y -= 0.3 * inch
+    c.setFont("Helvetica", 10)
+
+    dt_label = datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M:%S %Z")
+    src_label = (
+        DEFAULT_APPS_PATH.name
+        if (st.session_state.use_repo_default and DEFAULT_APPS_PATH)
+        else "Uploaded file"
+    )
+    c.drawString(1.0 * inch, y, f"Generated: {dt_label}")
+    y -= 0.2 * inch
+    c.drawString(1.0 * inch, y, f"Data source: {src_label}")
+
+    y -= 0.35 * inch
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(1.0 * inch, y, "Key Metrics")
+    c.setFont("Helvetica", 10)
+    y -= 0.25 * inch
+    lines = [
+        f"Confirmed Students: {conf_students:,}",
+        f"Confirmed Budget Exposure: {fmt_money(conf_budget)}",
+        f"Pending Students: {pend_students:,}",
+        f"Pending Budget Exposure: {fmt_money(pend_budget)}",
+        f"Total Students: {total_students:,}",
+        f"Total Budget Exposure: {fmt_money(total_budget)}",
     ]
-)
-cohort_summary["Students"] = cohort_summary["Students"].fillna(0).astype(int)
-cohort_summary = cohort_summary.sort_values(["Budget", "Students"], ascending=[False, False])
+    for line in lines:
+        c.drawString(1.0 * inch, y, line)
+        y -= 0.2 * inch
+        if y < 1.0 * inch:
+            c.showPage()
+            y = height - 1.0 * inch
+            c.setFont("Helvetica", 10)
 
-total_row = pd.DataFrame(
-    [{
-        "Cohort": "TOTAL",
-        "Students": int(cohort_summary["Students"].sum()),
-        "Budget": cohort_summary["Budget"].sum(min_count=1),
-    }]
-)
-cohort_summary = pd.concat([cohort_summary, total_row], ignore_index=True)
+    y -= 0.2 * inch
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(1.0 * inch, y, "Budget Summary by Status")
+    y -= 0.25 * inch
+    c.setFont("Helvetica", 10)
+    if summary.empty:
+        c.drawString(1.0 * inch, y, "No summary available for current filters.")
+    else:
+        for _, r in summary.iterrows():
+            s = (
+                f"{r['Status']}: Students {int(r['Students']):,}, Budget "
+                + ("-" if pd.isna(r["Budget"]) else f"${r['Budget']:,.0f}")
+            )
+            c.drawString(1.0 * inch, y, s)
+            y -= 0.18 * inch
+            if y < 1.0 * inch:
+                c.showPage()
+                y = height - 1.0 * inch
+                c.setFont("Helvetica", 10)
 
-st.subheader("Budget Summary by Cohort")
-st.dataframe(
-    cohort_summary.assign(
-        Students=cohort_summary["Students"].map(lambda x: f"{int(x):,}"),
-        Budget=cohort_summary["Budget"].map(fmt_money),
-    ),
-    use_container_width=True,
-)
+    c.showPage()
+    c.save()
+    return bio.getvalue()
 
 # =========================================================
-# DEBUG (post-SUMMARY)
+# EXPORTS
 # =========================================================
-with st.sidebar.expander("DEBUG: upload vs repo + loaded data", expanded=True):
-    st.sidebar.write("use_repo_default:", st.session_state.get("use_repo_default"))
-    st.sidebar.write("uploaded_apps is None:", uploaded_apps is None)
-    if uploaded_apps is not None:
-        st.sidebar.write("uploaded_apps.name:", uploaded_apps.name)
-        st.sidebar.write("uploaded_apps.size (bytes):", getattr(uploaded_apps, "size", None))
+st.subheader("Exports")
+colA, colB, colC = st.columns(3)
 
-    st.sidebar.write("DEFAULT_APPS_PATH:", str(DEFAULT_APPS_PATH) if DEFAULT_APPS_PATH else None)
-    if DEFAULT_APPS_PATH is not None:
-        try:
-            st.sidebar.write("DEFAULT_APPS_PATH exists:", DEFAULT_APPS_PATH.exists())
-        except Exception as e:
-            st.sidebar.write("DEFAULT_APPS_PATH exists: ERROR", e)
+with colA:
+    docx_bytes = build_docx_report()
+    st.download_button(
+        "Download Report (Word, .docx)",
+        data=docx_bytes,
+        file_name="EducationAbroad_Budget_Snapshot.docx",
+        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
 
-    # Show what the app can see in ./data
-    data_dir = Path("./data")
-    st.sidebar.write("CWD:", str(Path(".").resolve()))
-    st.sidebar.write("./data exists:", data_dir.exists())
-    if data_dir.exists():
-        try:
-            files = sorted([p.name for p in data_dir.iterdir()])
-            st.sidebar.write("Files in ./data:", files)
-        except Exception as e:
-            st.sidebar.error(f"Could not list ./data: {e}")
+with colB:
+    pdf_bytes = build_pdf_report()
+    st.download_button(
+        "Download Report (PDF, .pdf)",
+        data=pdf_bytes,
+        file_name="EducationAbroad_Budget_Snapshot.pdf",
+        mime="application/pdf",
+    )
 
-        csvs = sorted(list(data_dir.glob("*.csv")) + list(data_dir.glob("*.CSV")))
-        st.sidebar.write("CSV/CSV files:", [p.name for p in csvs])
-
-        parsed_ok, parsed_fail = [], []
-        for p in csvs:
-            (parsed_ok if parse_new_budget_name(p.stem) else parsed_fail).append(p.name)
-        st.sidebar.write("Parsed OK:", parsed_ok)
-        st.sidebar.write("Parsed FAIL:", parsed_fail)
-
-    # What actually got loaded into apps_df
-    try:
-        st.sidebar.write("apps_df rows:", int(apps_df.shape[0]))
-        st.sidebar.write("apps_df cols:", int(apps_df.shape[1]))
-        st.sidebar.write("apps_df empty:", bool(apps_df.empty))
-    except Exception as e:
-        st.sidebar.error(f"apps_df shape/empty check failed: {e}")
-
-    # Required columns resolution check (quick signal)
-    try:
-        resolved_dbg, missing_dbg = resolve_columns(apps_df)
-        st.sidebar.write("Resolved columns:", resolved_dbg)
-        st.sidebar.write("Missing required:", missing_dbg)
-    except Exception as e:
-        st.sidebar.error(f"resolve_columns failed: {e}")
-
-    # Show a preview of the actual loaded data (helps catch wrong file/source)
-    with st.sidebar.expander("apps_df preview (first 5 rows)", expanded=False):
-        try:
-            st.dataframe(apps_df.head(5), use_container_width=True)
-        except Exception as e:
-            st.sidebar.error(f"apps_df preview failed: {e}")
-
-    with st.sidebar.expander("apps_df headers", expanded=False):
-        try:
-            st.sidebar.write(list(apps_df.columns))
-        except Exception as e:
-            st.sidebar.error(f"apps_df headers failed: {e}")
+with colC:
+    out = io.BytesIO()
+    with pd.ExcelWriter(out, engine="xlsxwriter") as writer:
+        if not agg_confirmed.empty:
+            agg_confirmed.to_excel(writer, index=False, sheet_name="Approved_Student_Budget")
+        if not agg_pending.empty:
+            agg_pending.to_excel(writer, index=False, sheet_name="Pending_Student_Budget")
+        if not summary.empty:
+            summary.to_excel(writer, index=False, sheet_name="Budget_Summary_by_Status")
+    st.download_button(
+        "Download Workbook (.xlsx)",
+        data=out.getvalue(),
+        file_name="EducationAbroad_Budget_Workbook.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
